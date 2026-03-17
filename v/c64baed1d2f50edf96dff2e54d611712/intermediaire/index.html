@@ -1,0 +1,1686 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BNO vs EPR2 · 2035 intermédiaire</title>
+    <style>
+      :root {
+        --paper: #f4efe6;
+        --paper-strong: #fbf8f2;
+        --ink: #1f2430;
+        --muted: #6a717f;
+        --border: rgba(31, 36, 48, 0.12);
+        --shadow: 0 22px 60px rgba(19, 26, 38, 0.09);
+        --navy: #17324d;
+        --navy-soft: #dbe4ef;
+        --bno: #b45309;
+        --bno-soft: #fff1e8;
+        --epr: #1e5a5f;
+        --epr-soft: #e4f1f1;
+        --good: #1f7a5a;
+        --warn: #b75d17;
+        --bad: #b42318;
+        --line: 1.45;
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+        --radius-sm: 999px;
+        --page: min(1240px, calc(100vw - 32px));
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top left, rgba(23, 50, 77, 0.08), transparent 38%),
+          radial-gradient(circle at bottom right, rgba(180, 83, 9, 0.08), transparent 32%),
+          linear-gradient(180deg, #f7f3ea 0%, #f1eadf 100%);
+        color: var(--ink);
+        font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+        line-height: var(--line);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(23, 50, 77, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(23, 50, 77, 0.03) 1px, transparent 1px);
+        background-size: 28px 28px;
+        opacity: 0.25;
+      }
+
+      .page {
+        position: relative;
+        width: var(--page);
+        margin: 0 auto;
+        padding: 32px 0 72px;
+      }
+
+      .hero,
+      .panel,
+      .compare-card,
+      .table-card,
+      .footer-card {
+        background: rgba(251, 248, 242, 0.9);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(12px);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 28px;
+        border-radius: var(--radius-xl);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: var(--radius-sm);
+        background: rgba(23, 50, 77, 0.08);
+        color: var(--navy);
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      h1 {
+        margin: 14px 0 14px;
+        font-size: clamp(2.2rem, 4vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+      }
+
+      .lead {
+        max-width: none;
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      small {
+        color: var(--muted);
+      }
+
+      .section {
+        margin-top: 34px;
+      }
+
+      .section-head {
+        margin-bottom: 14px;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 1.65rem;
+      }
+
+      .section-head p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        max-width: none;
+      }
+
+      .grid-3,
+      .grid-2,
+      .compare-grid,
+      .angle-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .section-stack {
+        margin-top: 18px;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid-2,
+      .compare-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .angle-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .angle-card.wide,
+      .angle-grid > .formula-grid {
+        grid-column: 1 / -1;
+      }
+
+      .panel,
+      .compare-card,
+      .table-card,
+      .footer-card {
+        padding: 22px;
+        border-radius: var(--radius-xl);
+      }
+
+      .panel h3,
+      .compare-card h3 {
+        margin: 0;
+        font-size: 1.28rem;
+      }
+
+      .panel p,
+      .compare-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .metric-box {
+        min-width: 0;
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .metric-label {
+        color: var(--muted);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+      }
+
+      .metric-value {
+        margin-top: 6px;
+        font-size: clamp(1.2rem, 2vw, 1.7rem);
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        overflow-wrap: anywhere;
+      }
+
+      .metric-sub {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .chip {
+        display: inline-flex;
+        padding: 7px 11px;
+        border-radius: var(--radius-sm);
+        background: rgba(23, 50, 77, 0.08);
+        color: var(--navy);
+        font-size: 0.8rem;
+      }
+
+      .mix-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .mix-row {
+        display: grid;
+        grid-template-columns: minmax(120px, 170px) 1fr auto;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .mix-label {
+        color: var(--ink);
+      }
+
+      .mix-bar {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(23, 50, 77, 0.08);
+        overflow: hidden;
+      }
+
+      .mix-fill {
+        height: 100%;
+        border-radius: 999px;
+      }
+
+      .mix-fill.nuclear { background: #2d5b8a; }
+      .mix-fill.hydro { background: #4f86b5; }
+      .mix-fill.wind { background: #7bb3c8; }
+      .mix-fill.offshore { background: #99c9d7; }
+      .mix-fill.solar { background: #d9a94b; }
+      .mix-fill.gas { background: #b46c4c; }
+      .mix-fill.bio { background: #6d9661; }
+      .mix-fill.fossil { background: #8c4f45; }
+
+      .compare-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .compare-card.bno {
+        background: linear-gradient(180deg, rgba(255, 241, 232, 0.94), rgba(255, 248, 242, 0.94));
+      }
+
+      .compare-card.epr {
+        background: linear-gradient(180deg, rgba(228, 241, 241, 0.96), rgba(248, 251, 251, 0.96));
+      }
+
+      .compare-card::after {
+        content: "";
+        position: absolute;
+        inset: auto -80px -90px auto;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        opacity: 0.12;
+      }
+
+      .compare-card.bno::after { background: var(--bno); }
+      .compare-card.epr::after { background: var(--epr); }
+
+      .card-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 11px;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .compare-card.bno .card-kicker {
+        background: rgba(180, 83, 9, 0.12);
+        color: var(--bno);
+      }
+
+      .compare-card.epr .card-kicker {
+        background: rgba(30, 90, 95, 0.12);
+        color: var(--epr);
+      }
+
+      .story-strip {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .story-step {
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .story-step strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--navy);
+        font-size: 0.82rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .story-step p {
+        margin: 0;
+        color: var(--ink);
+      }
+
+      .story-step small {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+      }
+
+      .card-note {
+        margin-top: 16px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .angle-card {
+        padding: 22px;
+        border-radius: var(--radius-xl);
+        background: rgba(251, 248, 242, 0.92);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .bridge-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .bridge-intro {
+        padding: 22px;
+        border-radius: var(--radius-xl);
+        background: rgba(251, 248, 242, 0.92);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .bridge-intro h3 {
+        margin: 0;
+        font-size: 1.22rem;
+      }
+
+      .bridge-intro p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .bridge-formula {
+        margin-top: 14px;
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(23, 50, 77, 0.06);
+        color: var(--navy);
+        font-size: 0.98rem;
+        overflow-wrap: anywhere;
+      }
+
+      .formula-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .formula-card {
+        padding: 22px;
+        border-radius: var(--radius-xl);
+        background: rgba(251, 248, 242, 0.92);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .formula-card h3 {
+        margin: 0;
+        font-size: 1.22rem;
+      }
+
+      .formula-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .formula-stack {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .formula-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .formula-row span {
+        color: var(--ink);
+      }
+
+      .formula-row strong {
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+
+      .formula-row.plus strong {
+        color: var(--warn);
+      }
+
+      .formula-row.minus strong {
+        color: var(--good);
+      }
+
+      .formula-row.total {
+        background: rgba(23, 50, 77, 0.08);
+        border-color: rgba(23, 50, 77, 0.12);
+      }
+
+      .formula-row.total strong {
+        color: var(--navy);
+        font-size: 1.08rem;
+      }
+
+      .formula-note {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(23, 50, 77, 0.06);
+        color: var(--navy);
+      }
+
+      .method-viz {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .method-viz h4 {
+        margin: 0;
+        font-size: 0.92rem;
+        color: var(--navy);
+      }
+
+      .mini-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        margin-top: 10px;
+      }
+
+      .mini-legend .legend-item {
+        font-size: 0.84rem;
+      }
+
+      .mini-stack-list,
+      .mini-compare-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .mini-stack-row,
+      .mini-compare-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      .mini-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .mini-head strong {
+        color: var(--ink);
+        font-size: 0.94rem;
+      }
+
+      .mini-head span {
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .mini-track {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(23, 50, 77, 0.08);
+        overflow: hidden;
+      }
+
+      .mini-track-row {
+        display: grid;
+        grid-template-columns: 56px 1fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .mini-track-label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--navy);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .mini-track-value {
+        font-size: 0.86rem;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .mini-track.stacked {
+        display: flex;
+      }
+
+      .mini-fill {
+        height: 100%;
+      }
+
+      .mini-fill.bno {
+        background: rgba(180, 83, 9, 0.75);
+      }
+
+      .mini-fill.epr {
+        background: rgba(30, 90, 95, 0.78);
+      }
+
+      .mini-fill.france {
+        background: rgba(23, 50, 77, 0.72);
+      }
+
+      .mini-fill.export {
+        background: rgba(23, 50, 77, 0.28);
+      }
+
+      .mini-note {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .score-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .score-line {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .score-line strong {
+        color: var(--ink);
+      }
+
+      .winner-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .winner-pill.bno {
+        background: rgba(180, 83, 9, 0.12);
+        color: var(--bno);
+      }
+
+      .winner-pill.epr {
+        background: rgba(30, 90, 95, 0.12);
+        color: var(--epr);
+      }
+
+      .winner-pill.neutral {
+        background: rgba(23, 50, 77, 0.08);
+        color: var(--navy);
+      }
+
+      .angle-card.wide {
+        grid-column: 1 / -1;
+      }
+
+      .chart-card {
+        padding: 22px;
+        border-radius: var(--radius-xl);
+        background: rgba(251, 248, 242, 0.92);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .chart-card.wide {
+        grid-column: 1 / -1;
+      }
+
+      .chart-card h3 {
+        margin: 0;
+        font-size: 1.22rem;
+      }
+
+      .chart-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .chart-svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin-top: 14px;
+      }
+
+      .chart-note {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(23, 50, 77, 0.06);
+        color: var(--navy);
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 14px;
+        margin-top: 12px;
+      }
+
+      .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .legend-swatch {
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        display: inline-block;
+      }
+
+      .angle-card h3 {
+        margin: 0;
+        font-size: 1.22rem;
+      }
+
+      .angle-card p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .angle-duel {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .angle-line {
+        display: grid;
+        gap: 3px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid rgba(23, 50, 77, 0.08);
+      }
+
+      .angle-line strong {
+        color: var(--navy);
+      }
+
+      .angle-line span {
+        color: var(--muted);
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+
+      .verdict {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .verdict.bno {
+        background: rgba(180, 83, 9, 0.1);
+        color: #8b4513;
+      }
+
+      .verdict.epr {
+        background: rgba(30, 90, 95, 0.12);
+        color: #1e5a5f;
+      }
+
+      .verdict.neutral {
+        background: rgba(23, 50, 77, 0.08);
+        color: var(--navy);
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.96rem;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        border-bottom: 1px solid rgba(23, 50, 77, 0.1);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      thead th {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .ledger-table td.amount,
+      .ledger-table th.amount {
+        text-align: right;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .ledger-table td.note {
+        color: var(--muted);
+      }
+
+      .ledger-table tr.total td,
+      .ledger-table tr.final td {
+        font-weight: 700;
+      }
+
+      .ledger-table tr.final td {
+        border-bottom: none;
+      }
+
+      .footer-card {
+        margin-top: 26px;
+        color: var(--muted);
+      }
+
+      .footer-card p {
+        margin: 0;
+      }
+
+      @media (max-width: 1140px) {
+        .hero,
+        .grid-3,
+        .grid-2,
+        .compare-grid,
+        .angle-grid,
+        .formula-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .angle-card.wide {
+          grid-column: auto;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100vw - 18px, 100%);
+          padding-top: 12px;
+        }
+
+        .hero,
+        .panel,
+        .compare-card,
+        .table-card,
+        .footer-card,
+        .angle-card {
+          border-radius: 22px;
+        }
+
+        .metric-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .mix-row {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+      }
+    </style>
+  <meta name="robots" content="noindex,nofollow">
+</head>
+  <body><nav style="position:sticky;top:0;z-index:999;background:rgba(23,50,77,0.95);backdrop-filter:blur(8px);padding:10px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-family:system-ui,sans-serif;font-size:0.85rem;"><a href="../" style="color:#fff;text-decoration:none;font-weight:700;margin-right:8px;">BNO vs EPR2</a><a href="../" style="color:rgba(255,255,255,0.7);text-decoration:none;">Sommaire</a><a href="../tout-renouvelable/" style="color:rgba(255,255,255,0.7);text-decoration:none;">Tout-ENR</a><a href="../intermediaire/" style="color:rgba(255,255,255,0.7);text-decoration:none;">Intermédiaire</a><a href="../tendu/" style="color:rgba(255,255,255,0.7);text-decoration:none;">Tendu</a><a href="../trajectoires/" style="color:rgba(255,255,255,0.7);text-decoration:none;">Trajectoires 2025-2050</a></nav>
+    <main class="page">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">2035 · monde intermédiaire</div>
+          <h1>BNO dans le scénario central 2035</h1>
+          <p class="lead">
+            Le futur le plus probable : demande et offre équilibrées. À même budget annuel, que vaut 1 BNO face au paquet EPR2 ?
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>1. Le monde 2035 intermédiaire</h2>
+          <p>
+            On regarde d'abord le monde 2035 intermédiaire tel qu'il est :
+            demande, production, export, gaz, mix.
+          </p>
+        </div>
+        <div class="grid-3" id="baselineGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>2. Deux options au même ordre de coût</h2>
+          <p>
+            On met face à face deux paquets physiques pour le même prix annuel pour la France.
+            Le chiffre inclut tout : construction, raccordement, intégration au réseau, valeur de l'électricité produite.
+          </p>
+        </div>
+        <div class="grid-2" id="basisGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>3. Ce que ce budget achète vraiment</h2>
+          <p>
+            Puis on compare ce que ce budget achète :
+            service pour la France, soutien pour l'hiver, besoin d'appoint.
+          </p>
+        </div>
+        <div class="grid-2" id="methodGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>4. Le verdict</h2>
+          <p>
+            Si l'on s'arrête au message principal, il est ici.
+          </p>
+        </div>
+        <div class="angle-grid" id="verdictGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2></h2>
+          <p>
+            
+          </p>
+        </div>
+        <div class="bridge-grid" id="priceBridgeGrid" style="display:none"></div>
+      </section>
+
+    </main>
+
+    <script>
+      const DATA = {"generated_at": "", "run_dir": "", "scenario": {"id": "system_2035_intermediate", "label": "2035 intermédiaire", "base_price_eur_per_mwh": 58.0}, "observed_baseline": {"step_count": 17520, "step_minutes": 30, "raw_consumption_twh": 520.0, "raw_production_twh": 580.0, "raw_imports_twh": 0, "raw_exports_twh": 50.0, "raw_net_exports_twh": 50.0, "onshore_wind_twh": 56.0, "offshore_wind_twh": 14.0, "gas_twh": 16.0, "mix": [{"label": "Nucléaire", "twh": 350.0, "tone": "nuclear"}, {"label": "Hydraulique", "twh": 62.0, "tone": "hydro"}, {"label": "Éolien total", "twh": 70.0, "tone": "wind"}, {"label": "dont offshore", "twh": 14.0, "tone": "offshore"}, {"label": "Solaire", "twh": 70.0, "tone": "solar"}, {"label": "Gaz", "twh": 16.0, "tone": "gas"}, {"label": "Bioénergies", "twh": 11.0, "tone": "bio"}, {"label": "Fioul + charbon", "twh": 0.0, "tone": "fossil"}], "source_note": "Transition équilibrée. Le système a encore de la place pour de la capacité utile, mais pas illimitée."}, "monthly": [{"month": 1, "label": "Janv.", "observed_consumption_twh": 56, "observed_production_twh": 60, "observed_gas_twh": 1.72, "observed_net_exports_twh": 4, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 2, "label": "Févr.", "observed_consumption_twh": 48, "observed_production_twh": 52, "observed_gas_twh": 1.48, "observed_net_exports_twh": 4, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 3, "label": "Mars", "observed_consumption_twh": 45, "observed_production_twh": 49, "observed_gas_twh": 1.38, "observed_net_exports_twh": 4, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 4, "label": "Avr.", "observed_consumption_twh": 38, "observed_production_twh": 44, "observed_gas_twh": 1.17, "observed_net_exports_twh": 6, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 5, "label": "Mai", "observed_consumption_twh": 36, "observed_production_twh": 45, "observed_gas_twh": 1.11, "observed_net_exports_twh": 9, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 6, "label": "Juin", "observed_consumption_twh": 36, "observed_production_twh": 47, "observed_gas_twh": 1.11, "observed_net_exports_twh": 11, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 7, "label": "Juil.", "observed_consumption_twh": 38, "observed_production_twh": 49, "observed_gas_twh": 1.17, "observed_net_exports_twh": 11, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 8, "label": "Août", "observed_consumption_twh": 35, "observed_production_twh": 46, "observed_gas_twh": 1.08, "observed_net_exports_twh": 11, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 9, "label": "Sept.", "observed_consumption_twh": 36, "observed_production_twh": 44, "observed_gas_twh": 1.11, "observed_net_exports_twh": 8, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 10, "label": "Oct.", "observed_consumption_twh": 40, "observed_production_twh": 46, "observed_gas_twh": 1.23, "observed_net_exports_twh": 6, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 11, "label": "Nov.", "observed_consumption_twh": 46, "observed_production_twh": 52, "observed_gas_twh": 1.42, "observed_net_exports_twh": 6, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}, {"month": 12, "label": "Déc.", "observed_consumption_twh": 52, "observed_production_twh": 58, "observed_gas_twh": 1.6, "observed_net_exports_twh": 6, "bno_delivered_twh": 0, "epr_delivered_twh": 0, "bno_substitution_gas_twh": 0, "epr_substitution_gas_twh": 0, "bno_export_twh": 0, "epr_export_twh": 0}], "default_socialized_demand_twh": 520.0, "default_story_strike_bno": 120.0, "default_strike_min": 80, "default_strike_max": 160, "default_strike_step": 5, "projects": {"bno": {"project_id": "bno_central", "label": "BNO 2035", "technology_label": "Éolien en mer", "capacity_mw": 2000.0, "capacity_factor": 45.7, "capacity_credit": 30.0, "lifetime_years": 30, "plant_cost_eur_per_mwh": 110.0, "connection_annuity_meur_y": 227.4, "connection_socialized": true, "sponsor_wacc_pct": 7.5, "financing_cost_share_pct": 40.0, "opex_share_pct": 32.0, "annual_debt_service_share_pct": 33.0, "initial_equity_investment_meur": 2200.0, "strike_eur_per_mwh": 120.0, "contract_type": "cfd_2way", "public_support_flag": true, "contract_duration_years": 20, "counterfactual_mode": "future_heuristic", "reference_year": 2035, "delivered_twh": 8.007, "sold_twh": 6.208, "useful_france_twh": 6.178, "service_system_twh": 6.178, "service_france_twh": 4.204, "valued_export_twh": 1.973, "substitution_twh": 4.204, "export_twh": 2.004, "spill_twh": 1.799, "pressure_twh": 3.802, "substitution_gas_twh": 2.412, "substitution_oil_twh": 0.134, "substitution_coal_twh": 0.119, "substitution_imports_twh": 0.157, "m0": 58.0, "neg_share": 0.13093918461716028, "negative_price_pct": 13.09, "curtailment_pct": 22.466, "export_share_pct": 25.0, "value_factor": 0.277, "cost_net_eur_per_mwh": 144.2, "integration_cost_delivered_eur_per_mwh": 43.7, "energy_export_credit_delivered_eur_per_mwh": 78.5, "winter_capacity_credit_delivered_eur_per_mwh": 0.4, "vnsa_meur": -964.0, "system_delta_meur": 964.0, "bcr_sys": 0.277, "socialized_connection_meur": 227.4, "market_revenue_meur": 99.6, "monetized_capacity_mw": 187.0, "required_flex_mw": 215.0, "capacity_avoided_mw": 168.0, "cost_stack": {"production_project": 66.0, "production_financing": 44.0, "production": 110.0, "connexion": 28.4, "equilibrage": 12.0, "cout_net": 144.2}}, "epr2": {"project_id": "epr2", "label": "1 EPR2 2035", "technology_label": "Nucléaire", "capacity_mw": 1670.0, "capacity_factor": 90.0, "capacity_credit": 95.0, "lifetime_years": 60, "plant_cost_eur_per_mwh": 92.9, "connection_annuity_meur_y": 1.5, "connection_socialized": false, "sponsor_wacc_pct": 8.0, "financing_cost_share_pct": 45.0, "opex_share_pct": 22.0, "annual_debt_service_share_pct": 38.0, "initial_equity_investment_meur": 4500.0, "strike_eur_per_mwh": 0.0, "contract_type": "merchant", "public_support_flag": false, "contract_duration_years": 0, "counterfactual_mode": "future_heuristic", "reference_year": 2035, "delivered_twh": 13.166, "sold_twh": 10.407, "useful_france_twh": 10.364, "service_system_twh": 10.364, "service_france_twh": 7.537, "valued_export_twh": 2.827, "substitution_twh": 7.537, "export_twh": 2.871, "spill_twh": 2.759, "pressure_twh": 5.63, "substitution_gas_twh": 4.26, "substitution_oil_twh": 0.223, "substitution_coal_twh": 0.196, "substitution_imports_twh": 0.194, "m0": 58.0, "neg_share": 0.1432942256590997, "negative_price_pct": 14.33, "curtailment_pct": 20.954, "export_share_pct": 21.8, "value_factor": 0.267, "cost_net_eur_per_mwh": 40.2, "integration_cost_delivered_eur_per_mwh": 3.1, "energy_export_credit_delivered_eur_per_mwh": 79.6, "winter_capacity_credit_delivered_eur_per_mwh": 1.5, "vnsa_meur": -424.6, "system_delta_meur": 424.6, "bcr_sys": 0.267, "socialized_connection_meur": 0, "market_revenue_meur": 160.9, "monetized_capacity_mw": 1054.0, "required_flex_mw": 47.0, "capacity_avoided_mw": 1054.0, "cost_stack": {"production_project": 51.1, "production_financing": 41.8, "production": 92.9, "connexion": 0.1, "equilibrage": 0.4, "cout_net": 40.2}}}, "notes": {}, "world_meta": {"slug": "2035_intermediaire", "title": "2035 intermédiaire", "subtitle": "Demande centrale, vent moyen, Europe équilibrée", "eyebrow": "2035 · monde intermédiaire", "h1": "BNO dans le scénario central 2035", "lead": "Le futur le plus probable : demande et offre équilibrées. À même budget annuel, que vaut 1 BNO face au paquet EPR2 ?"}};
+      const STORY = {
+        symmetricEprPublicStrike: 100.0,
+      };
+      const state = {
+        strike: DATA.default_story_strike_bno,
+        demandTwh: DATA.default_socialized_demand_twh,
+      };
+      // Compute sameBudgetEprScale dynamically after state is ready
+      STORY.sameBudgetEprScale = null; // set in renderAll after budget functions are defined
+
+      function fmtNumber(value, digits = 1) {
+        return Number(value).toLocaleString("fr-FR", {
+          minimumFractionDigits: digits,
+          maximumFractionDigits: digits,
+        });
+      }
+
+      function fmtPct(value, digits = 1) {
+        return `${fmtNumber(value, digits)} %`;
+      }
+
+      function fmtTwh(value, digits = 2) {
+        return `${fmtNumber(value, digits)} TWh`;
+      }
+
+      function fmtMw(value, digits = 0) {
+        return `${fmtNumber(value, digits)} MW`;
+      }
+
+      function fmtMoney(value, digits = 0) {
+        return `${fmtNumber(value, digits)} M€`;
+      }
+
+      function fmtEuroPerMWh(value, digits = 1) {
+        const sign = value > 0 ? "+" : "";
+        return `${sign}${fmtNumber(value, digits)} €/MWh`;
+      }
+
+      function budgetScenario(projectId, mode = "story") {
+        const project = DATA.projects[projectId];
+        if (projectId === "bno") {
+          return {
+            contract_type: project.contract_type,
+            public_support_flag: project.public_support_flag,
+            strike_eur_per_mwh: state.strike,
+            negative_price_rule: "pay_anyway",
+            socialized_connection_meur: project.socialized_connection_meur,
+            label: `CfD BNO ${fmtNumber(state.strike, 0)} €/MWh`,
+          };
+        }
+        if (projectId === "epr2" && mode === "symmetric_public") {
+          return {
+            contract_type: "cfd_2way",
+            public_support_flag: true,
+            strike_eur_per_mwh: STORY.symmetricEprPublicStrike,
+            negative_price_rule: "none",
+            socialized_connection_meur: project.socialized_connection_meur,
+            label: `CfD public EPR2 ${fmtNumber(STORY.symmetricEprPublicStrike, 0)} €/MWh`,
+          };
+        }
+        return {
+          contract_type: project.contract_type,
+          public_support_flag: project.public_support_flag,
+          strike_eur_per_mwh: project.strike_eur_per_mwh,
+          negative_price_rule: "none",
+          socialized_connection_meur: project.socialized_connection_meur,
+          label: project.contract_type === "merchant" ? "merchant" : "contrat projet",
+        };
+      }
+
+      function budgetComponents(projectId, mode = "story") {
+        const project = DATA.projects[projectId];
+        const scenario = budgetScenario(projectId, mode);
+        if (scenario.contract_type !== "cfd_2way" || !scenario.public_support_flag) {
+          return {
+            public_settlement_meur: 0,
+            negative_price_exposure_meur: 0,
+            socialized_connection_meur: scenario.socialized_connection_meur,
+            budget_total_meur: scenario.socialized_connection_meur,
+            strike_eur_per_mwh: scenario.strike_eur_per_mwh,
+            contract_label: scenario.label,
+          };
+        }
+        const strike = scenario.strike_eur_per_mwh;
+        const settlement = project.sold_twh * (strike - project.m0);
+        const exposure = scenario.negative_price_rule === "pay_anyway"
+          ? project.sold_twh * project.neg_share * Math.max(strike - Math.max(project.m0, 0), 0)
+          : 0;
+        const total = settlement + exposure + scenario.socialized_connection_meur;
+        return {
+          public_settlement_meur: settlement,
+          negative_price_exposure_meur: exposure,
+          socialized_connection_meur: scenario.socialized_connection_meur,
+          budget_total_meur: total,
+          strike_eur_per_mwh: strike,
+          contract_label: scenario.label,
+        };
+      }
+
+      function collectiveCostMeur(projectId, mode = "story") {
+        const project = DATA.projects[projectId];
+        const budget = budgetComponents(projectId, mode).budget_total_meur;
+        return project.system_delta_meur + budget;
+      }
+
+      function collectiveImpactEurPerMWhFinal(projectId, mode = "story") {
+        return collectiveCostMeur(projectId, mode) / state.demandTwh;
+      }
+
+      function packageData(projectId, scale = 1, mode = "story") {
+        const project = DATA.projects[projectId];
+        const baseLabel = projectId === "bno" ? "BNO" : "EPR2";
+        return {
+          ...project,
+          budget_mode: mode,
+          scale,
+          package_label: scale === 1 ? `1 ${baseLabel}` : `${fmtNumber(scale, scale % 1 === 0 ? 0 : 2)} ${baseLabel}`,
+          delivered_twh: project.delivered_twh * scale,
+          service_france_twh: project.service_france_twh * scale,
+          valued_export_twh: project.valued_export_twh * scale,
+          service_system_twh: project.service_system_twh * scale,
+          monetized_capacity_mw: project.monetized_capacity_mw * scale,
+          required_flex_mw: project.required_flex_mw * scale,
+          spill_twh: project.spill_twh * scale,
+          incumbent_pressure_twh: project.incumbent_pressure_twh * scale,
+          substitution_gas_twh: project.substitution_gas_twh * scale,
+          winter_gas_twh: winterTotal(projectId, "substitution_gas_twh") * scale,
+          offwinter_export_twh: offWinterTotal(projectId, "export_twh") * scale,
+          collective_cost_meur: collectiveCostMeur(projectId, mode) * scale,
+          collective_impact_eur_per_mwh_final: collectiveImpactEurPerMWhFinal(projectId, mode) * scale,
+        };
+      }
+
+      function exactBudgetParityEprScale(mode = "story") {
+        const eprCost = collectiveCostMeur("epr2", mode);
+        if (!Number.isFinite(eprCost) || eprCost <= 0) {
+          return 0;
+        }
+        return collectiveCostMeur("bno", mode) / eprCost;
+      }
+
+      function monthlyKey(projectId, metric) {
+        return `${projectId === "bno" ? "bno" : "epr"}_${metric}`;
+      }
+
+      function winterTotal(projectId, metric) {
+        return sumSeries(DATA.monthly, monthlyKey(projectId, metric), [1, 2, 3, 11, 12]);
+      }
+
+      function offWinterTotal(projectId, metric) {
+        return sumSeries(DATA.monthly, monthlyKey(projectId, metric), [4, 5, 6, 7, 8, 9, 10]);
+      }
+
+      function widthPct(value, maxValue) {
+        if (!Number.isFinite(value) || !Number.isFinite(maxValue) || maxValue <= 0) {
+          return 0;
+        }
+        return Math.max(0, Math.min(100, (value / maxValue) * 100));
+      }
+
+      function renderMiniTrackRow(label, tone, value, maxValue, formatter) {
+        return `
+          <div class="mini-track-row">
+            <div class="mini-track-label">${label}</div>
+            <div class="mini-track"><div class="mini-fill ${tone}" style="width:${widthPct(value, maxValue)}%"></div></div>
+            <div class="mini-track-value">${formatter(value)}</div>
+          </div>
+        `;
+      }
+
+      function renderMiniCompareBlock(label, bnoValue, eprValue, formatter) {
+        return renderMiniDuelBlock(label, "BNO", "bno", bnoValue, "EPR2", "epr", eprValue, formatter);
+      }
+
+      function renderMiniDuelBlock(label, leftLabel, leftTone, leftValue, rightLabel, rightTone, rightValue, formatter) {
+        const maxValue = Math.max(leftValue, rightValue, 0.001);
+        return `
+          <div class="mini-compare-row">
+            <div class="mini-head">
+              <strong>${label}</strong>
+            </div>
+            <div class="mini-compare-list">
+              ${renderMiniTrackRow(leftLabel, leftTone, leftValue, maxValue, formatter)}
+              ${renderMiniTrackRow(rightLabel, rightTone, rightValue, maxValue, formatter)}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderMiniServiceRow(label, franceValue, exportValue, maxTotal) {
+        return `
+          <div class="mini-stack-row">
+            <div class="mini-head">
+              <strong>${label}</strong>
+              <span>${fmtTwh(franceValue, 2)} pour la France · ${fmtTwh(exportValue, 2)} à l'export</span>
+            </div>
+            <div class="mini-track stacked">
+              <div class="mini-fill france" style="width:${widthPct(franceValue, maxTotal)}%"></div>
+              <div class="mini-fill export" style="width:${widthPct(exportValue, maxTotal)}%"></div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderComparisonBasis() {
+        const scale = STORY.sameBudgetEprScale;
+        const bno = packageData("bno", 1, "symmetric_public");
+        const epr = packageData("epr2", scale, "symmetric_public");
+        const eprLabel = `${fmtNumber(scale, scale % 1 === 0 ? 0 : 1)} EPR2`;
+
+        const bnoRaw = DATA.projects.bno;
+        const eprRaw = DATA.projects.epr2;
+        document.getElementById("basisGrid").innerHTML = `
+          <article class="panel">
+            <h3>Option A · 1 BNO</h3>
+            <p>2 GW d'<strong>éolien flottant en mer</strong>, au large de la Bretagne Nord.
+            Production : ${fmtTwh(bnoRaw.delivered_twh, 1)}/an. Contrat garanti à ${fmtNumber(state.strike, 0)} €/MWh.</p>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Coût annuel net France</div>
+                <div class="metric-value">${fmtMoney(bno.collective_cost_meur, 0)}</div>
+                <div class="metric-sub">tout compris : production, raccordement sous-marin, équilibrage, soutien public</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Puissance installée</div>
+                <div class="metric-value">${fmtMw(bnoRaw.capacity_mw)}</div>
+                <div class="metric-sub">facteur de charge ${fmtPct(bnoRaw.capacity_factor, 0)} — production variable selon le vent</div>
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Option B · ${eprLabel}</h3>
+            <p>${fmtMw(eprRaw.capacity_mw * scale)} de <strong>nucléaire EPR2</strong>, dimensionné
+            pour atteindre le même coût annuel pour la France. Contrat à ${fmtNumber(STORY.symmetricEprPublicStrike, 0)} €/MWh.</p>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Coût annuel net France</div>
+                <div class="metric-value">${fmtMoney(epr.collective_cost_meur, 0)}</div>
+                <div class="metric-sub">tout compris : production, raccordement, équilibrage, soutien public</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Puissance installée</div>
+                <div class="metric-value">${fmtMw(eprRaw.capacity_mw * scale)}</div>
+                <div class="metric-sub">facteur de charge ${fmtPct(eprRaw.capacity_factor, 0)} — production stable jour et nuit</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderBaseline() {
+        const observed = DATA.observed_baseline;
+        const monthly = DATA.monthly;
+        const maxMix = Math.max(...observed.mix.map((item) => item.twh));
+        const demandChart = renderComboChart(monthly, {
+          title: "Demande mensuelle et production observée du monde 2035 intermédiaire",
+          barKey: "observed_consumption_twh",
+          lines: [
+            { key: "observed_production_twh", color: "#17324d" },
+          ],
+        });
+        document.getElementById("baselineGrid").innerHTML = `
+          <article class="panel">
+            <h3>Le système avant l'ajout</h3>
+            <p>Avant d'ajouter un projet, la France 2035 intermédiaire produit déjà beaucoup.
+            Elle exporte déjà souvent.</p>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Demande observée</div>
+                <div class="metric-value">${fmtTwh(observed.raw_consumption_twh, 1)}</div>
+                <div class="metric-sub">somme brute de la consommation demi-heure du monde 2035 intermédiaire</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Production observée</div>
+                <div class="metric-value">${fmtTwh(observed.raw_production_twh, 1)}</div>
+                <div class="metric-sub">offre déjà abondante avant d'ajouter un actif de plus</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Export net observé</div>
+                <div class="metric-value">${fmtTwh(observed.raw_net_exports_twh, 1)}</div>
+                <div class="metric-sub">le système est déjà structurellement exportateur</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Gaz observé</div>
+                <div class="metric-value">${fmtTwh(observed.gas_twh, 1)}</div>
+                <div class="metric-sub">présent surtout dans les mois les plus tendus</div>
+              </div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>Une année déjà en surplus</h3>
+            <p>Mois par mois, la question est simple :
+            le système est-il déjà long avant d'ajouter un actif de plus ?</p>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-swatch" style="background:rgba(23,50,77,0.16)"></span>Demande observée</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#17324d"></span>Production observée</span>
+            </div>
+            ${demandChart}
+            <div class="chart-note">Demande centrale, vent moyen, Europe équilibrée</div>
+          </article>
+          <article class="panel">
+            <h3>Le décor avant l'ajout</h3>
+            <p>Le mix 2025 vu par le moteur avant ajout.</p>
+            <div class="chip-row">
+              <span class="chip">${fmtNumber(observed.step_count, 0)} pas de ${observed.step_minutes} min</span>
+              <span class="chip">2035 intermédiaire</span>
+              <span class="chip">France + échanges observés</span>
+              <span class="chip">offshore réel ${fmtTwh(observed.offshore_wind_twh, 1)}</span>
+            </div>
+            <div class="mix-list">
+              ${observed.mix.map((item) => `
+                <div class="mix-row">
+                  <div class="mix-label">${item.label}</div>
+                  <div class="mix-bar"><div class="mix-fill ${item.tone}" style="width:${(item.twh / maxMix) * 100}%"></div></div>
+                  <div>${fmtTwh(item.twh, 1)}</div>
+                </div>
+              `).join("")}
+            </div>
+          </article>
+        `;
+      }
+
+      function renderMethod() {
+        const scale = STORY.sameBudgetEprScale;
+        const eprLabel = `${fmtNumber(scale, scale % 1 === 0 ? 0 : 1)} EPR2`;
+        const bno = packageData("bno", 1, "symmetric_public");
+        const epr = packageData("epr2", scale, "symmetric_public");
+        const bnoFlexPerWinterMw = bno.monetized_capacity_mw > 0 ? bno.required_flex_mw / bno.monetized_capacity_mw : 0;
+        const eprFlexPerWinterMw = epr.monetized_capacity_mw > 0 ? epr.required_flex_mw / epr.monetized_capacity_mw : 0;
+        const bnoRaw = DATA.projects.bno;
+        const eprRaw = DATA.projects.epr2;
+        const observed = DATA.observed_baseline;
+        const bnoGasSubTwh = bnoRaw.substitution_gas_twh;
+        const eprGasSubTwh = eprRaw.substitution_gas_twh * scale;
+        const bnoGasPct = observed.gas_twh > 0 ? (bnoGasSubTwh / observed.gas_twh) * 100.0 : 0;
+        const eprGasPct = observed.gas_twh > 0 ? (eprGasSubTwh / observed.gas_twh) * 100.0 : 0;
+        const bnoNetCost = bnoRaw.cost_net_eur_per_mwh;
+        const eprNetCost = eprRaw.cost_net_eur_per_mwh;
+        const bnoInteg = bnoRaw.integration_cost_delivered_eur_per_mwh;
+        const eprInteg = eprRaw.integration_cost_delivered_eur_per_mwh;
+
+        document.getElementById("methodGrid").innerHTML = `
+          <article class="panel">
+            <h3>1. Électricité utile pour la France</h3>
+            <p>À budget égal, combien de TWh servent vraiment la France.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("Service rendu à la France", "1 BNO", "bno", bno.service_france_twh, eprLabel, "epr", epr.service_france_twh, (value) => fmtTwh(value, 2))}
+              </div>
+              <div class="mini-note">Le baseload à 90 % de facteur de charge livre beaucoup plus de MWh utiles que l'intermittent à 40 %.</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>2. Gaz évité</h3>
+            <p>Combien de gaz fossile chaque option chasse du mix français.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("Gaz substitué", "1 BNO", "bno", bnoGasSubTwh, eprLabel, "epr", eprGasSubTwh, (value) => fmtTwh(value, 2))}
+              </div>
+              <div class="mini-note">Sur ${fmtTwh(observed.gas_twh, 1)} de gaz observé en 2025 : BNO en évite ${fmtPct(bnoGasPct, 0)}, le paquet EPR en évite ${fmtPct(eprGasPct, 0)}.</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>3. Puissance d'hiver</h3>
+            <p>Ce qui compte vraiment pendant les heures tendues.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("MW certifiés en pointe d'hiver", "1 BNO", "bno", bno.monetized_capacity_mw, eprLabel, "epr", epr.monetized_capacity_mw, (value) => fmtMw(value))}
+              </div>
+              <div class="mini-note">Le nucléaire est là quand il fait froid et sombre. L'éolien offshore contribue, mais bien moins.</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>4. Coût net par MWh utile</h3>
+            <p>Ce que coûte réellement chaque MWh une fois la valeur créée déduite.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("Coût système net", "1 BNO", "bno", bnoNetCost, eprLabel, "epr", eprNetCost, (value) => `${fmtNumber(value, 1)} €/MWh`)}
+              </div>
+              <div class="mini-note">Production + raccordement + intégration, moins la valeur récupérée. Plus c'est bas, plus le MWh est efficace.</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>5. Coûts d'intégration</h3>
+            <p>Ce que le système doit dépenser autour du projet : réseau, équilibrage, redispatch, pression sur le parc existant.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("Intégration par MWh livré", "1 BNO", "bno", bnoInteg, eprLabel, "epr", eprInteg, (value) => `${fmtNumber(value, 1)} €/MWh`)}
+              </div>
+              <div class="mini-note">L'éolien en mer demande beaucoup plus de réseau, d'équilibrage et crée plus de pression sur le parc existant.</div>
+            </div>
+          </article>
+          <article class="panel">
+            <h3>6. Appoint nécessaire</h3>
+            <p>Combien de MW de flex il faut garder par MW utile d'hiver.</p>
+            <div class="method-viz">
+              <div class="mini-compare-list">
+                ${renderMiniDuelBlock("Flex par MW utile d'hiver", "1 BNO", "bno", bnoFlexPerWinterMw, eprLabel, "epr", eprFlexPerWinterMw, (value) => `${fmtNumber(value, 2)} MW/MW`)}
+              </div>
+              <div class="mini-note">Plus ce ratio est bas, plus l'option tient seule sans devoir payer de l'appoint autour.</div>
+            </div>
+          </article>
+        `;
+      }
+
+      function sumSeries(rows, key, months = null) {
+        return rows
+          .filter((row) => !months || months.includes(row.month))
+          .reduce((acc, row) => acc + row[key], 0);
+      }
+
+      function renderComboChart(rows, config) {
+        const width = 1080;
+        const height = 320;
+        const left = 58;
+        const right = 16;
+        const top = 22;
+        const bottom = 44;
+        const plotW = width - left - right;
+        const plotH = height - top - bottom;
+        const allValues = rows.flatMap((row) => [row[config.barKey], ...config.lines.map((line) => row[line.key])]);
+        const maxY = Math.max(...allValues, 0.1) * 1.15;
+        const xStep = plotW / rows.length;
+        const barWidth = xStep * 0.56;
+        const y = (value) => top + plotH - (value / maxY) * plotH;
+        const x = (index) => left + xStep * index + xStep / 2;
+        const gridValues = [0, 0.25, 0.5, 0.75, 1].map((ratio) => maxY * ratio);
+
+        const grid = gridValues.map((value) => `
+          <g>
+            <line x1="${left}" y1="${y(value)}" x2="${width - right}" y2="${y(value)}" stroke="rgba(23,50,77,0.10)" stroke-width="1" />
+            <text x="${left - 10}" y="${y(value) + 4}" text-anchor="end" font-size="12" fill="#6a717f">${fmtNumber(value, 1)}</text>
+          </g>
+        `).join("");
+
+        const bars = rows.map((row, index) => `
+          <rect
+            x="${x(index) - barWidth / 2}"
+            y="${y(row[config.barKey])}"
+            width="${barWidth}"
+            height="${top + plotH - y(row[config.barKey])}"
+            rx="8"
+            fill="rgba(23,50,77,0.16)"
+          />
+        `).join("");
+
+        const lines = config.lines.map((line) => {
+          const points = rows.map((row, index) => `${x(index)},${y(row[line.key])}`).join(" ");
+          const circles = rows.map((row, index) => `
+            <circle cx="${x(index)}" cy="${y(row[line.key])}" r="4.5" fill="${line.color}" />
+          `).join("");
+          return `
+            <polyline fill="none" stroke="${line.color}" stroke-width="3.5" points="${points}" stroke-linecap="round" stroke-linejoin="round" />
+            ${circles}
+          `;
+        }).join("");
+
+        const labels = rows.map((row, index) => `
+          <text x="${x(index)}" y="${height - 14}" text-anchor="middle" font-size="12" fill="#6a717f">${row.label}</text>
+        `).join("");
+
+        return `
+          <svg class="chart-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="${config.title}">
+            ${grid}
+            ${bars}
+            ${lines}
+            <line x1="${left}" y1="${top + plotH}" x2="${width - right}" y2="${top + plotH}" stroke="rgba(23,50,77,0.16)" stroke-width="1.2" />
+            ${labels}
+          </svg>
+        `;
+      }
+
+      function renderPriceBridge() {
+        const bno = DATA.projects.bno;
+        const epr = DATA.projects.epr2;
+        const bnoBudget = budgetComponents("bno", "story");
+        const eprBudgetSymmetric = budgetComponents("epr2", "symmetric_public");
+        const bnoBook = bno.system_book;
+        const eprBook = epr.system_book;
+        const exactBudgetScale = exactBudgetParityEprScale("symmetric_public");
+        const scale = (value, factor = 1) => value * factor;
+        const eprScaleLabel = fmtNumber(exactBudgetScale, 2);
+        const totalFranceTarget = collectiveCostMeur("bno", "story");
+        const rows = [
+          {
+            label: "+ Coût projet et financement",
+            bnoValue: bnoBook.cost_project_financing_meur,
+            eprValue: scale(eprBook.cost_project_financing_meur, exactBudgetScale),
+            note: "construction et financement du parc",
+          },
+          {
+            label: "+ Raccordement",
+            bnoValue: bnoBook.cost_connection_meur,
+            eprValue: scale(eprBook.cost_connection_meur, exactBudgetScale),
+            note: "câbles sous-marins et poste de raccordement au réseau électrique",
+          },
+          {
+            label: "+ Réseau et redispatch",
+            bnoValue: bnoBook.cost_network_redispatch_meur,
+            eprValue: scale(eprBook.cost_network_redispatch_meur, exactBudgetScale),
+            note: "renforts et réajustements côté système",
+          },
+          {
+            label: "+ Flexibilité et appoint",
+            bnoValue: bnoBook.cost_flex_backup_meur,
+            eprValue: scale(eprBook.cost_flex_backup_meur, exactBudgetScale),
+            note: "ce qu'il faut garder autour pour faire tenir le parc",
+          },
+          {
+            label: "+ Place prise sur le parc déjà là",
+            bnoValue: bnoBook.cost_pressure_meur,
+            eprValue: scale(eprBook.cost_pressure_meur, exactBudgetScale),
+            note: "effet économique sur les moyens déjà présents",
+          },
+          {
+            label: "- Valeur électricité",
+            bnoValue: bnoBook.value_energy_meur,
+            eprValue: scale(eprBook.value_energy_meur, exactBudgetScale),
+            note: "électricité qui remplace encore quelque chose en France",
+          },
+          {
+            label: "- Imports évités",
+            bnoValue: bnoBook.value_imports_avoided_meur,
+            eprValue: scale(eprBook.value_imports_avoided_meur, exactBudgetScale),
+            note: "coût d'import évité quand le projet couvre une partie du besoin",
+          },
+          {
+            label: "- Valeur export",
+            bnoValue: bnoBook.value_export_meur,
+            eprValue: scale(eprBook.value_export_meur, exactBudgetScale),
+            note: "électricité qui trouve encore un débouché à l'export",
+          },
+          {
+            label: "- Valeur hiver",
+            bnoValue: bnoBook.value_winter_meur,
+            eprValue: scale(eprBook.value_winter_meur, exactBudgetScale),
+            note: "petit plus rendu pendant les heures tendues",
+          },
+          {
+            label: "= Coût net système",
+            bnoValue: bnoBook.net_system_cost_meur,
+            eprValue: scale(eprBook.net_system_cost_meur, exactBudgetScale),
+            note: "ce qu'il reste une fois les coûts et la valeur système passés",
+            className: "total",
+          },
+          {
+            label: "+ Budget public explicite",
+            bnoValue: bnoBudget.budget_total_meur,
+            eprValue: scale(eprBudgetSymmetric.budget_total_meur, exactBudgetScale),
+            note: "soutien public net : ce que l'État verse au-delà de ce que le marché paie déjà, plus le raccordement socialisé",
+            className: "total",
+          },
+          {
+            label: "= Coût total annuel pour la France",
+            bnoValue: totalFranceTarget,
+            eprValue: collectiveCostMeur("epr2", "symmetric_public") * exactBudgetScale,
+            note: "la ligne finale retombe sur le même coût à gauche et à droite",
+            className: "final",
+          },
+        ];
+
+        document.getElementById("priceBridgeGrid").innerHTML = `
+          <article class="table-card">
+            <h3>1 BNO contre ${eprScaleLabel} EPR2, au même coût annuel</h3>
+            <p>On part de 1 BNO. En face, on met la fraction d'EPR2 qui coûte le même prix annuel à la France.</p>
+            <div class="table-scroll">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th>Ligne</th>
+                    <th class="amount">1 BNO</th>
+                    <th class="amount">${eprScaleLabel} EPR2</th>
+                    <th>Lecture</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.map((row) => `
+                    <tr class="${row.className || ""}">
+                      <td>${row.label}</td>
+                      <td class="amount">${fmtMoney(row.bnoValue, 0)}</td>
+                      <td class="amount">${fmtMoney(row.eprValue, 0)}</td>
+                      <td class="note">${row.note}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+            <div class="formula-note"><strong>Contrats.</strong> BNO à ${fmtNumber(state.strike, 0)} €/MWh, EPR2 à ${fmtNumber(STORY.symmetricEprPublicStrike, 0)} €/MWh. Le budget public est la différence entre le prix garanti et ce que le marché paie déjà, plus le raccordement quand il est socialisé.</div>
+            <div class="formula-note"><strong>Note.</strong> EDF étant public, une partie du retour producteur revient à la sphère publique. L'EPR2 serait alors encore un peu plus intéressant que ce qui est montré ici.</div>
+          </article>
+        `;
+      }
+
+      function renderAssumptions() {
+        const bno = DATA.projects.bno;
+        const epr = DATA.projects.epr2;
+        document.getElementById("assumptionsGrid").innerHTML = `
+          <article class="formula-card">
+            <h3>BNO · ce que les 110 €/MWh veulent dire ici</h3>
+            <p>Dans le modèle actuel, le coût de production avant contrat n'est pas reconstruit poste par poste depuis un devis d'ingénierie. Il est saisi comme un coût annuel de production, puis réparti entre bloc économique et bloc financement.</p>
+            <div class="formula-stack">
+              <div class="formula-row">
+                <span>Production hors financement</span>
+                <strong>${fmtNumber(bno.cost_stack.production_project, 1)} €/MWh</strong>
+              </div>
+              <div class="formula-row">
+                <span>Financement inclus dans le coût de production</span>
+                <strong>${fmtNumber(bno.cost_stack.production_financing, 1)} €/MWh</strong>
+              </div>
+              <div class="formula-row total">
+                <span>= coût de production avant contrat</span>
+                <strong>${fmtNumber(bno.plant_cost_eur_per_mwh, 1)} €/MWh</strong>
+              </div>
+            </div>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Durée de vie</div>
+                <div class="metric-value">${fmtNumber(bno.lifetime_years, 0)} ans</div>
+                <div class="metric-sub">hypothèse de vie économique du projet</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">WACC sponsor</div>
+                <div class="metric-value">${fmtPct(bno.sponsor_wacc_pct, 1)}</div>
+                <div class="metric-sub">hypothèse financière du projet</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Part financement</div>
+                <div class="metric-value">${fmtPct(bno.financing_cost_share_pct, 1)}</div>
+                <div class="metric-sub">part du coût de production rangée dans le bloc financement</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Capitaux propres initiaux</div>
+                <div class="metric-value">${fmtMoney(bno.initial_equity_investment_meur, 0)}</div>
+                <div class="metric-sub">mise initiale du sponsor dans ce benchmark</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Connexion</div>
+                <div class="metric-value">${fmtMoney(bno.connection_annuity_meur_y, 1)}/an</div>
+                <div class="metric-sub">${bno.connection_socialized ? "socialisée et lue à part du coût de production" : "portée par le projet"}</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Note de lecture</div>
+                <div class="metric-value">${fmtPct(bno.opex_share_pct, 1)}</div>
+                <div class="metric-sub">part opex utilisée côté sponsor, pas comme ligne distincte dans le prix public affiché</div>
+              </div>
+            </div>
+            <div class="formula-note">Ce que le modèle <strong>ne sépare pas encore</strong> en lignes autonomes pour BNO: une décomposition fine type fabrication, exploitation détaillée, fin de vie. Ces éléments sont agrégés, si on les retient, dans le coût de production saisi en entrée.</div>
+          </article>
+          <article class="formula-card">
+            <h3>EPR2 · ce que les 92,9 €/MWh veulent dire ici</h3>
+            <p>L'EPR2 est traité avec la même logique reduced-form: un coût de production avant contrat, puis une séparation interne entre bloc économique et bloc financement. Cela permet une première comparaison, mais pas encore une note d'ingénierie complète poste par poste.</p>
+            <div class="formula-stack">
+              <div class="formula-row">
+                <span>Production hors financement</span>
+                <strong>${fmtNumber(epr.cost_stack.production_project, 1)} €/MWh</strong>
+              </div>
+              <div class="formula-row">
+                <span>Financement inclus dans le coût de production</span>
+                <strong>${fmtNumber(epr.cost_stack.production_financing, 1)} €/MWh</strong>
+              </div>
+              <div class="formula-row total">
+                <span>= coût de production avant contrat</span>
+                <strong>${fmtNumber(epr.plant_cost_eur_per_mwh, 1)} €/MWh</strong>
+              </div>
+            </div>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Durée de vie</div>
+                <div class="metric-value">${fmtNumber(epr.lifetime_years, 0)} ans</div>
+                <div class="metric-sub">hypothèse de vie économique du projet</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">WACC sponsor</div>
+                <div class="metric-value">${fmtPct(epr.sponsor_wacc_pct, 1)}</div>
+                <div class="metric-sub">hypothèse financière du projet</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Part financement</div>
+                <div class="metric-value">${fmtPct(epr.financing_cost_share_pct, 1)}</div>
+                <div class="metric-sub">part du coût de production rangée dans le bloc financement</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Capitaux propres initiaux</div>
+                <div class="metric-value">${fmtMoney(epr.initial_equity_investment_meur, 0)}</div>
+                <div class="metric-sub">mise initiale du sponsor dans ce benchmark</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Connexion</div>
+                <div class="metric-value">${fmtMoney(epr.connection_annuity_meur_y, 1)}/an</div>
+                <div class="metric-sub">${epr.connection_socialized ? "socialisée et lue à part du coût de production" : "non socialisée dans ce benchmark"}</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Note de lecture</div>
+                <div class="metric-value">${fmtPct(epr.opex_share_pct, 1)}</div>
+                <div class="metric-sub">part opex utilisée côté sponsor, pas comme ligne distincte dans le prix public affiché</div>
+              </div>
+            </div>
+            <div class="formula-note">Ce que le modèle <strong>ne sépare pas encore</strong> en lignes autonomes pour l'EPR2: combustible, cycle du combustible, déchets, démantèlement. Dans cette version, ces briques ne sont pas visibles comme postes séparés dans le prix avant contrat; elles sont au mieux incluses de façon agrégée dans l'entrée <code>plant_cost_eur_per_mwh</code>.</div>
+          </article>
+        `;
+      }
+
+      function renderVerdict() {
+        const scale = STORY.sameBudgetEprScale;
+        const eprLabel = `${fmtNumber(scale, scale % 1 === 0 ? 0 : 1)} EPR2`;
+        const bno = packageData("bno", 1, "symmetric_public");
+        const epr = packageData("epr2", scale, "symmetric_public");
+        const bnoRaw = DATA.projects.bno;
+        const eprRaw = DATA.projects.epr2;
+        const serviceRatio = bno.service_france_twh > 0 ? epr.service_france_twh / bno.service_france_twh : 0;
+        const winterRatio = bno.monetized_capacity_mw > 0 ? epr.monetized_capacity_mw / bno.monetized_capacity_mw : 0;
+        const bnoFlexPerWinterMw = bno.monetized_capacity_mw > 0 ? bno.required_flex_mw / bno.monetized_capacity_mw : 0;
+        const eprFlexPerWinterMw = epr.monetized_capacity_mw > 0 ? epr.required_flex_mw / epr.monetized_capacity_mw : 0;
+        const flexRatio = eprFlexPerWinterMw > 0 ? bnoFlexPerWinterMw / eprFlexPerWinterMw : 0;
+        const costRatio = eprRaw.cost_net_eur_per_mwh > 0 ? bnoRaw.cost_net_eur_per_mwh / eprRaw.cost_net_eur_per_mwh : 0;
+
+        document.getElementById("verdictGrid").innerHTML = `
+          <article class="angle-card wide">
+            <h3>À budget égal, le paquet EPR rend plus de service</h3>
+            <p>Pour la même dépense annuelle, le paquet EPR livre plus d'électricité utile,
+            plus de puissance quand il fait froid, et chaque MWh coûte moins cher.</p>
+            <div class="metric-grid">
+              <div class="metric-box">
+                <div class="metric-label">Service pour la France</div>
+                <div class="metric-value">${fmtNumber(serviceRatio, 1)}×</div>
+                <div class="metric-sub">plus de MWh utiles avec ${eprLabel} qu'avec 1 BNO</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Puissance d'hiver</div>
+                <div class="metric-value">${fmtNumber(winterRatio, 1)}×</div>
+                <div class="metric-sub">plus de MW utiles dans les heures critiques</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Coût net par MWh utile</div>
+                <div class="metric-value">${fmtNumber(bnoRaw.cost_net_eur_per_mwh, 0)} / ${fmtNumber(eprRaw.cost_net_eur_per_mwh, 0)} €</div>
+                <div class="metric-sub">chaque MWh de BNO coûte ${fmtNumber(costRatio, 1)}× plus cher au système que l'EPR2</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Besoin d'appoint relatif</div>
+                <div class="metric-value">${fmtNumber(flexRatio, 1)}×</div>
+                <div class="metric-sub">plus de flex par MW utile pour BNO que pour l'EPR</div>
+              </div>
+            </div>
+            <div class="verdict epr">Sur l'année 2025 réelle, à même dépense annuelle pour la France, chaque MWh utile de BNO coûte ${fmtNumber(costRatio, 1)}× plus cher et le paquet livre ${fmtNumber(serviceRatio, 1)}× moins de service.</div>
+          </article>
+        `;
+      }
+
+      function renderAll() {
+        STORY.sameBudgetEprScale = exactBudgetParityEprScale("symmetric_public");
+        renderBaseline();
+        renderComparisonBasis();
+        renderMethod();
+        renderVerdict();
+      }
+      renderAll();
+    </script>
+  </body>
+</html>
